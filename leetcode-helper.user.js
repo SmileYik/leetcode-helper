@@ -7,7 +7,6 @@
 // @match        https://leetcode-cn.com/problems/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @require      https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js
-// @require      https://gist.github.com/raw/2625891/waitForKeyElements.js
 // @require      https://unpkg.com/sweetalert/dist/sweetalert.min.js
 // @grant        GM_registerMenuCommand
 // @grant        GM_setClipboard
@@ -25,10 +24,22 @@
         return this.replace(new RegExp(s1, "gm"), s2);
     };
 
-    // 注入菜单
-    GM_registerMenuCommand("复制LeetCode题目为markdown，并存入剪切板", function () {
-        // 等待内容渲染完整之后才开始解析
-        waitForKeyElements(description, function () {
+    const id = setInterval(function () {tick()}, 1000);
+
+    function tick() {
+        console.log("tick and wait problem load");
+        const elems = document.getElementsByClassName("description__2b0C");
+        if (elems.length > 0) {
+            console.log("problem loaded.");
+            clearInterval(id);
+            // 注入菜单
+            GM_registerMenuCommand("复制LeetCode题目为markdown，并存入剪切板", function () {
+                loadProblem();
+            });
+        }
+    }
+
+    function loadProblem() {
             // 题目
             var title = $('[data-cypress="QuestionTitle"]').text();
             // 难度
@@ -52,8 +63,7 @@
                 icon: "success",
                 title: "复制成功",
             });
-        });
-    });
+        }
 
     function solove(dom) {
         var element = dom[0];
