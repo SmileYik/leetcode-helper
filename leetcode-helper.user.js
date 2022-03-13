@@ -26,11 +26,13 @@
 
     const id = setInterval(function () {tick()}, 1000);
 
+    // tick and check aim class is load or not
     function tick() {
         console.log("tick and wait problem load");
         const elems = document.getElementsByClassName("description__2b0C");
         if (elems.length > 0) {
             console.log("problem loaded.");
+            // if loaded then clear interval and start to do things as same as waitForKeyElements.js
             clearInterval(id);
             // 注入菜单
             GM_registerMenuCommand("复制LeetCode题目为markdown，并存入剪切板", function () {
@@ -39,31 +41,32 @@
         }
     }
 
+    // do things as same as waitForKeyElements.js
     function loadProblem() {
-            // 题目
-            var title = $('[data-cypress="QuestionTitle"]').text();
-            // 难度
-            var difficulty = '难度：' + $('[data-degree]').text();
-            // 内容Dom
-            var contentDom = $('.content__1Y2H');
-            // 遍历内容Dom，逐个处理
-            contentDom.children().each(function () {
-                solove($(this));
-            });
-            // console.log(title);
-            // console.log(difficulty);
-            // console.log(content);
-            // console.log(contentDom[0].outerHTML);
-            var str = title + '\n\n' + difficulty + '\n' + content + '\n' + '来源：力扣（LeetCode）\n' +
-                '链接：' + window.location.href + '\n' +
-                '著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。';
-            console.log(str);
-            GM_setClipboard(str);
-            swal({
-                icon: "success",
-                title: "复制成功",
-            });
-        }
+        // 题目
+        var title = $('[data-cypress="QuestionTitle"]').text();
+        // 难度
+        var difficulty = '难度：' + $('[data-degree]').text();
+        // 内容Dom
+        var contentDom = $('.content__1Y2H');
+        // 遍历内容Dom，逐个处理
+        contentDom.children().each(function () {
+            solove($(this));
+        });
+        // console.log(title);
+        // console.log(difficulty);
+        // console.log(content);
+        // console.log(contentDom[0].outerHTML);
+        var str = title + '\n\n' + difficulty + '\n' + content + '\n' + '来源：力扣（LeetCode）\n' +
+            '链接：' + window.location.href + '\n' +
+            '著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。';
+        console.log(str);
+        GM_setClipboard(str);
+        swal({
+            icon: "success",
+            title: "复制成功",
+        });
+    }
 
     function solove(dom) {
         var element = dom[0];
